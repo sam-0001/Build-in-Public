@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '../types';
 
@@ -19,8 +20,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Helper to determine API URL dynamically based on current browser location
+// Helper to determine API URL dynamically
 const getDynamicApiUrl = () => {
+    // In production (Render), we serve frontend from backend, so use relative path
+    if ((import.meta as any).env && (import.meta as any).env.PROD) {
+        return '/api';
+    }
+
     let envUrl = 'http://localhost:5000/api';
     
     // Safely attempt to read VITE_API_URL
@@ -34,11 +40,8 @@ const getDynamicApiUrl = () => {
 
     if (typeof window !== 'undefined') {
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        // If browser is on network IP (e.g. 192.168.1.5) but API is set to localhost, swap it to match
-        // This allows the phone to talk to the computer's backend on the same port
         if (!isLocalhost && envUrl.includes('localhost')) {
             const newUrl = envUrl.replace('localhost', window.location.hostname);
-            console.log(`🌍 Detected Network IP. Switching API URL to: ${newUrl}`);
             return newUrl;
         }
     }
@@ -47,7 +50,7 @@ const getDynamicApiUrl = () => {
 
 const API_URL = getDynamicApiUrl();
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('bip_token'));
   const [showAuthModal, setShowAuthModal] = useState(false);
