@@ -10,9 +10,16 @@ import SibApiV3Sdk from 'sib-api-v3-sdk';
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 // Load environment variables
 dotenv.config();
+
+// Fix for __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -35,11 +42,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-// --- HEALTH CHECK ---
-app.get('/', (req, res) => {
-    res.send(`Build in Public Backend is Running on Port ${PORT}! 🚀`);
-});
 
 // --- CHECKS ---
 const requiredEnv = ['MONGODB_URI', 'JWT_SECRET', 'R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET_NAME'];
@@ -798,9 +800,22 @@ app.post('/api/payment/verify', async (req, res) => {
   }
 });
 
-// Catch-all for API 404
-app.use('/api', (req, res) => {
-    res.status(404).json({ error: `API Route Not Found: ${req.method} ${req.originalUrl}` });
+// --- SERVE FRONTEND (PRODUCTION) ---
+// This must be after API routes
+
+// Ensure dist folder exists and serve files from it
+const distPath = path.join(__dirname, 'dist');
+app.use(express.static(distPath));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+    const indexPath = path.join(distPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        console.error("❌ dist/index.html is missing. Frontend not built.");
+        res.status(500).send("Frontend build artifacts missing. Please run 'npm run build' on the server.");
+    }
 });
 
 app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
