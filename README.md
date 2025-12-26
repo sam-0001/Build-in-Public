@@ -1,20 +1,61 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Build in Public – Engineers
 
-# Run and deploy your AI Studio app
+Build in Public – Engineers is a student-driven engineering platform focused on learning by building in public.  
+It helps engineering students prepare for exams, build real projects, and share their learning journey openly.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/drive/1mpC5J6MmTKZIK7blERBz5SYixmk_Sbnn
+## 🚀 What This Project Is About
 
-## Run Locally
+Build in Public – Engineers is designed to:
+- Support engineering students from FE to BE
+- Encourage transparent learning and consistent progress
+- Combine exam preparation with real skill development
+- Share notes, projects, and learnings openly
 
-**Prerequisites:**  Node.js
+This platform follows the **build in public** philosophy, where growth, mistakes, and improvements are visible and shared.
 
+---
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 🧠 Key Features
+
+- Exam-oriented engineering resources  
+- Structured notes and subject-wise content  
+- Student-focused learning flow  
+- Clean and minimal UI  
+- Email-based authentication with OTP verification  
+- Community-first approach  
+
+---
+
+## 🛠 Tech Stack
+
+**Frontend**
+- React + TypeScript
+- Vite
+- Modern component-based UI
+
+**Backend**
+- Node.js
+- Express
+
+**Other**
+- Email OTP authentication
+- Environment-based configuration
+
+---
+
+## 📁 Project Structure
+
+```text
+.
+├── components/      # Reusable UI components
+├── context/         # Global state management
+├── pages/           # Application pages
+├── server.js        # Backend server
+├── App.tsx          # Main app component
+├── index.tsx        # App entry point
+├── vite.config.ts   # Vite configuration
+├── tsconfig.json    # TypeScript config
+├── package.json     # Dependencies and scripts
+└── README.md
