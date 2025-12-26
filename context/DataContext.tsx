@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Course, ExamNote } from '../types';
 import { useAuth } from './AuthContext';
@@ -21,7 +22,7 @@ interface DataContextType {
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-export const DataProvider = ({ children }: { children: ReactNode }) => {
+export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { apiUrl } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [notes, setNotes] = useState<ExamNote[]>([]);
